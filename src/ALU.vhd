@@ -53,6 +53,10 @@ begin
 				--------------------- LOGIC OPERATIONS -----------------------
 				--------------------------------------------------------------
 
+				when "0100" => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
+				when "0101" => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
+				when "0110" => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+				when "0111" => result <= signed(not ('0' & operand_a_in));  -- NOT
 
 				--------------------------------------------------------------
 				---------------------- SHIFT OPERATIONS ----------------------
