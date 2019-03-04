@@ -31,7 +31,7 @@ architecture arch of ALU is
 	constant INC	: std_logic_vector(ALU_OP_WIDTH-1 downto 0) := "0010";
 	constant DEC	: std_logic_vector(ALU_OP_WIDTH-1 downto 0) := "0011";
 	signal static_op : std_logic_vector(3 downto 0);
-	signal result	: signed(32 downto 0);
+	signal result	: signed(32 downto 0) := (others => '0');
 
 begin
 
@@ -61,7 +61,7 @@ begin
 				--------------------------------------------------------------
 				---------------------- SHIFT OPERATIONS ----------------------
 				--------------------------------------------------------------
-				
+				when "1000" => result <= signed(operand_a_in(31 downto 0) & '0');
 				when others => result <= "000000000000000000000000000000000";
 			end case;
 		end if;

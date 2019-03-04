@@ -61,6 +61,9 @@ begin
 		-- Test NOT
 		wait until rising_edge(clk);
 			op <= "0111";
+		-- Test SHIFT LEFT
+		wait until rising_edge(clk);
+			op <= "1000";
 
 		wait for 10 ns;
 	end process simulation;
