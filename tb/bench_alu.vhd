@@ -39,32 +39,32 @@ begin
 		
 		-- Test ADD
 		wait until rising_edge(clk);
-			op <= OP_ADD;
+			op <= TEST_ADD;
 		-- Test SUB
 		wait until rising_edge(clk);
-			op <= OP_SUB;
+			op <= TEST_SUB;
 		-- Test INC
 		wait until rising_edge(clk);
-			op <= OP_INC;
+			op <= TEST_INC;
 		-- Test DEC
 		wait until rising_edge(clk);
-			op <= OP_DEC;
+			op <= TEST_DEC;
 
 		-- Test AND
 		wait until rising_edge(clk);
-			op <= OP_AND;
+			op <= TEST_AND;
 		-- Test OR
 		wait until rising_edge(clk);
-			op <= OP_OR;
+			op <= TEST_OR;
 		-- Test XOR
 		wait until rising_edge(clk);
-			op <= OP_XOR;
+			op <= TEST_XOR;
 		-- Test NOT
 		wait until rising_edge(clk);
-			op <= OP_NOT;
+			op <= TEST_NOT;
 		-- Test SHIFT LEFT
 		wait until rising_edge(clk);
-			op <= OP_SHIFT;
+			op <= TEST_SHIFT;
 
 		wait for 10 ns;
 	end process simulation;

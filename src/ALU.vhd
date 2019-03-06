@@ -38,24 +38,24 @@ begin
 			--------------------------------------------------------------
 			------------------ ARITHMETIC OPERATIONS ---------------------
 			--------------------------------------------------------------
-			when OP_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
-			when OP_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
-			when OP_INC => result <= signed('0' & operand_a_in) + 1;
-			when OP_DEC => result <= signed('0' & operand_a_in) - 1;
+			when TEST_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
+			when TEST_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
+			when TEST_INC => result <= signed('0' & operand_a_in) + 1;
+			when TEST_DEC => result <= signed('0' & operand_a_in) - 1;
 			
 			--------------------------------------------------------------
 			--------------------- LOGIC OPERATIONS -----------------------
 			--------------------------------------------------------------
 
-			when OP_AND => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
-			when OP_OR => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
-			when OP_XOR => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
-			when OP_NOT => result <= signed(not ('0' & operand_a_in));  -- NOT
+			when TEST_AND => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
+			when TEST_OR => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
+			when TEST_XOR => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+			when TEST_NOT => result <= signed(not ('0' & operand_a_in));  -- NOT
 
 			--------------------------------------------------------------
 			---------------------- SHIFT OPERATIONS ----------------------
 			--------------------------------------------------------------
-			when "1000" => result <= signed(operand_a_in(31 downto 0) & '0');
+			when TEST_SHIFT => result <= signed(operand_a_in(31 downto 0) & '0');
 			when others => result <= "000000000000000000000000000000000";
 		end case;
 	end process calculation;
