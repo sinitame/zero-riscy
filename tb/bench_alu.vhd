@@ -21,8 +21,6 @@ begin
 
 	DUT : entity lib_VHDL.ALU
 		port map(
-				clk						=> clk,
-				reset					=> reset,
 				operator_in				=> op,
 				operand_a_in			=> A,
 				operand_b_in			=> B,

@@ -8,9 +8,6 @@ entity ALU is
 			ALU_OP_WIDTH			: natural := 4
 		);
 	port(
-			clk						: in std_logic;
-			reset					: in std_logic;
-
 			operator_in				: in std_logic_vector(ALU_OP_WIDTH-1 downto 0);
 			operand_a_in			: in std_logic_vector(31 downto 0);
 			operand_b_in			: in std_logic_vector(31 downto 0);
@@ -37,34 +34,32 @@ begin
 
 	static_op <= operator_in;
 
-	calculation: process(clk,operand_a_in,operand_b_in, static_op)
+	calculation: process(operand_a_in,operand_b_in, static_op)
 	begin
-		if rising_edge(clk) then
-			case static_op is
-				--------------------------------------------------------------
-				------------------ ARITHMETIC OPERATIONS ---------------------
-				--------------------------------------------------------------
-				when "0000" => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
-				when "0001" => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
-				when "0010" => result <= signed('0' & operand_a_in) + 1;
-				when "0011" => result <= signed('0' & operand_a_in) - 1;
-				
-				--------------------------------------------------------------
-				--------------------- LOGIC OPERATIONS -----------------------
-				--------------------------------------------------------------
+		case static_op is
+			--------------------------------------------------------------
+			------------------ ARITHMETIC OPERATIONS ---------------------
+			--------------------------------------------------------------
+			when "0000" => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
+			when "0001" => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
+			when "0010" => result <= signed('0' & operand_a_in) + 1;
+			when "0011" => result <= signed('0' & operand_a_in) - 1;
+			
+			--------------------------------------------------------------
+			--------------------- LOGIC OPERATIONS -----------------------
+			--------------------------------------------------------------
 
-				when "0100" => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
-				when "0101" => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
-				when "0110" => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
-				when "0111" => result <= signed(not ('0' & operand_a_in));  -- NOT
+			when "0100" => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
+			when "0101" => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
+			when "0110" => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+			when "0111" => result <= signed(not ('0' & operand_a_in));  -- NOT
 
-				--------------------------------------------------------------
-				---------------------- SHIFT OPERATIONS ----------------------
-				--------------------------------------------------------------
-				when "1000" => result <= signed(operand_a_in(31 downto 0) & '0');
-				when others => result <= "000000000000000000000000000000000";
-			end case;
-		end if;
+			--------------------------------------------------------------
+			---------------------- SHIFT OPERATIONS ----------------------
+			--------------------------------------------------------------
+			when "1000" => result <= signed(operand_a_in(31 downto 0) & '0');
+			when others => result <= "000000000000000000000000000000000";
+		end case;
 	end process calculation;
 
 	result_out <= std_logic_vector(result(31 downto 0));
