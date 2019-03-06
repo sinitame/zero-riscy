@@ -7,6 +7,7 @@ entity bench_alu is
 end entity;
 
 library lib_VHDL;
+use lib_VHDL.defines.all;
 
 architecture arch of bench_alu is
 
@@ -38,32 +39,32 @@ begin
 		
 		-- Test ADD
 		wait until rising_edge(clk);
-			op <= "0000";
+			op <= OP_ADD;
 		-- Test SUB
 		wait until rising_edge(clk);
-			op <= "0001";
+			op <= OP_SUB;
 		-- Test INC
 		wait until rising_edge(clk);
-			op <= "0010";
+			op <= OP_INC;
 		-- Test DEC
 		wait until rising_edge(clk);
-			op <= "0011";
+			op <= OP_DEC;
 
 		-- Test AND
 		wait until rising_edge(clk);
-			op <= "0100";
+			op <= OP_AND;
 		-- Test OR
 		wait until rising_edge(clk);
-			op <= "0101";
+			op <= OP_OR;
 		-- Test XOR
 		wait until rising_edge(clk);
-			op <= "0110";
+			op <= OP_XOR;
 		-- Test NOT
 		wait until rising_edge(clk);
-			op <= "0111";
+			op <= OP_NOT;
 		-- Test SHIFT LEFT
 		wait until rising_edge(clk);
-			op <= "1000";
+			op <= OP_SHIFT;
 
 		wait for 10 ns;
 	end process simulation;

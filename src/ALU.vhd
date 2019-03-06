@@ -2,6 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+library lib_VHDL;
+use lib_VHDL.defines.all;
 
 entity ALU is
 	generic(
@@ -23,10 +25,6 @@ end ALU;
 
 architecture arch of ALU is
 
-	constant ADD	: std_logic_vector(ALU_OP_WIDTH-1 downto 0) := "0000";
-	constant SUB	: std_logic_vector(ALU_OP_WIDTH-1 downto 0) := "0001";
-	constant INC	: std_logic_vector(ALU_OP_WIDTH-1 downto 0) := "0010";
-	constant DEC	: std_logic_vector(ALU_OP_WIDTH-1 downto 0) := "0011";
 	signal static_op : std_logic_vector(3 downto 0);
 	signal result	: signed(32 downto 0) := (others => '0');
 
@@ -40,19 +38,19 @@ begin
 			--------------------------------------------------------------
 			------------------ ARITHMETIC OPERATIONS ---------------------
 			--------------------------------------------------------------
-			when "0000" => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
-			when "0001" => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
-			when "0010" => result <= signed('0' & operand_a_in) + 1;
-			when "0011" => result <= signed('0' & operand_a_in) - 1;
+			when OP_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
+			when OP_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
+			when OP_INC => result <= signed('0' & operand_a_in) + 1;
+			when OP_DEC => result <= signed('0' & operand_a_in) - 1;
 			
 			--------------------------------------------------------------
 			--------------------- LOGIC OPERATIONS -----------------------
 			--------------------------------------------------------------
 
-			when "0100" => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
-			when "0101" => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
-			when "0110" => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
-			when "0111" => result <= signed(not ('0' & operand_a_in));  -- NOT
+			when OP_AND => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
+			when OP_OR => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
+			when OP_XOR => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+			when OP_NOT => result <= signed(not ('0' & operand_a_in));  -- NOT
 
 			--------------------------------------------------------------
 			---------------------- SHIFT OPERATIONS ----------------------
