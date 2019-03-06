@@ -6,6 +6,8 @@ use ieee.numeric_std.all;
 entity bench_alu is
 end entity;
 
+library lib_VHDL;
+
 architecture arch of bench_alu is
 
 	signal clk		: std_logic := '0';
@@ -17,7 +19,7 @@ architecture arch of bench_alu is
 
 begin
 
-	DUT : entity work.ALU
+	DUT : entity lib_VHDL.ALU
 		port map(
 				clk						=> clk,
 				reset					=> reset,

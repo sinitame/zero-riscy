@@ -23,8 +23,8 @@ WAVEFORM_VIEWER = gtkwave
 all: clean make run view
 
 compile:
-	@$(GHDL_CMD) -i $(GHDL_FLAGS) --workdir=simulation --work=work $(TESTBENCHPATH) $(FILES)
-	@$(GHDL_CMD) -m  $(GHDL_FLAGS) --workdir=simulation --work=work $(TESTBENCHFILE)
+	@$(GHDL_CMD) -i $(GHDL_FLAGS) --workdir=simulation --work=lib_VHDL $(TESTBENCHPATH) $(FILES)
+	@$(GHDL_CMD) -m  $(GHDL_FLAGS) --workdir=simulation --work=lib_VHDL $(TESTBENCHFILE)
 
 make:
 	@mkdir -p simulation
