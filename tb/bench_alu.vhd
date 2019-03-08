@@ -13,10 +13,11 @@ architecture arch of bench_alu is
 
 	signal clk		: std_logic := '0';
 	signal reset	: std_logic := '0';
-	signal op		: std_logic_vector(3 downto 0) := "0000";
+	signal op		: std_logic_vector(5 downto 0)	:= "000000";
 	signal A		: std_logic_vector(31 downto 0) := (others => '0');
 	signal B		: std_logic_vector(31 downto 0) := (others => '0');
 	signal res		: std_logic_vector(31 downto 0) := (others => '0');
+	signal comp_res	: std_logic := '0';
 
 begin
 
@@ -25,7 +26,8 @@ begin
 				operator_in				=> op,
 				operand_a_in			=> A,
 				operand_b_in			=> B,
-				result_out				=> res
+				result_out				=> res,
+				comparison_result_out	=> comp_res
 		);
 
 

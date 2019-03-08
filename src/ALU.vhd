@@ -7,25 +7,21 @@ use lib_VHDL.defines.all;
 
 entity ALU is
 	generic(
-			ALU_OP_WIDTH			: natural := 4
+			ALU_OP_WIDTH			: natural := 6
 		);
 	port(
 			operator_in				: in std_logic_vector(ALU_OP_WIDTH-1 downto 0);
 			operand_a_in			: in std_logic_vector(31 downto 0);
 			operand_b_in			: in std_logic_vector(31 downto 0);
 
-			adder_result_out		: out std_logic_vector(31 downto 0);
-			add_result_ext_out		: out std_logic_vector(33 downto 0);
-
 			result_out				: out std_logic_vector(31 downto 0);
-			comparison_result_out	: out std_logic;
-			is_equal_result_out		: out std_logic
+			comparison_result_out	: out std_logic
 		);
 end ALU;
 
 architecture arch of ALU is
 
-	signal static_op : std_logic_vector(3 downto 0);
+	signal static_op : std_logic_vector(6-1 downto 0);
 	signal result	: signed(32 downto 0) := (others => '0');
 
 begin
