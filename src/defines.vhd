@@ -6,15 +6,15 @@ package defines is
 	----------- Simple ALU operations (testing purpose) ----------
 	--------------------------------------------------------------
 
-	constant TEST_ADD		: std_logic_vector(3 downto 0)	:= "0000";
-	constant TEST_SUB		: std_logic_vector(3 downto 0)	:= "0001";
-	constant TEST_INC		: std_logic_vector(3 downto 0)	:= "0010";
-	constant TEST_DEC		: std_logic_vector(3 downto 0)	:= "0011";
-	constant TEST_AND		: std_logic_vector(3 downto 0)	:= "0100";
-	constant TEST_OR		: std_logic_vector(3 downto 0)	:= "0101";
-	constant TEST_XOR		: std_logic_vector(3 downto 0)	:= "0110";
-	constant TEST_NOT		: std_logic_vector(3 downto 0)	:= "0111";
-	constant TEST_SHIFT		: std_logic_vector(3 downto 0)	:= "1000";
+	constant TEST_ADD		: std_logic_vector(5 downto 0)	:= "000000";
+	constant TEST_SUB		: std_logic_vector(5 downto 0)	:= "000001";
+	constant TEST_INC		: std_logic_vector(5 downto 0)	:= "000010";
+	constant TEST_DEC		: std_logic_vector(5 downto 0)	:= "000011";
+	constant TEST_AND		: std_logic_vector(5 downto 0)	:= "000100";
+	constant TEST_OR		: std_logic_vector(5 downto 0)	:= "000101";
+	constant TEST_XOR		: std_logic_vector(5 downto 0)	:= "000110";
+	constant TEST_NOT		: std_logic_vector(5 downto 0)	:= "000111";
+	constant TEST_SHIFT		: std_logic_vector(5 downto 0)	:= "001000";
 	
 	--------------------------------------------------------------
 	------------------- ALU instruction code  --------------------
@@ -29,6 +29,14 @@ package defines is
 	constant OP_ALU_SRA		: std_logic_vector(8 downto 0) := "100000101";
 	constant OP_ALU_OR		: std_logic_vector(8 downto 0) := "000000110";
 	constant OP_ALU_AND		: std_logic_vector(8 downto 0) := "000000111";
+
+	-------------------- IMM12 Instructions ----------------------
+	constant OP_ALU_ADDI	: std_logic_vector(2 downto 0) := "000";
+	constant OP_ALU_SLTI	: std_logic_vector(2 downto 0) := "010";
+	constant OP_ALU_SLTUI	: std_logic_vector(2 downto 0) := "011";
+	constant OP_ALU_XORI	: std_logic_vector(2 downto 0) := "100";
+	constant OP_ALU_ORI		: std_logic_vector(2 downto 0) := "110";
+	constant OP_ALU_ANDI	: std_logic_vector(2 downto 0) := "111";
 
 	--------------------------------------------------------------
 	------------------- ALU operations codes ---------------------
@@ -108,7 +116,7 @@ package defines is
 	constant OPCODE_JUMP	: std_logic_vector(6 downto 0) := "1100011";
 	constant OPCODE_LOAD	: std_logic_vector(6 downto 0) := "0000011";
 	constant OPCODE_STORE	: std_logic_vector(6 downto 0) := "0100011";
-	constant OPCODE_OP_REG	: std_logic_vector(6 downto 0) := "0010011";
-	constant OPCODE_OP_IMM	: std_logic_vector(6 downto 0) := "0110011";
+	constant OPCODE_OP_REG	: std_logic_vector(6 downto 0) := "0110011";
+	constant OPCODE_OP_IMM	: std_logic_vector(6 downto 0) := "0010011";
 
 end package;
