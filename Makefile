@@ -4,7 +4,7 @@ VHDLEX = .vhd
 
 # testbench
 TESTBENCHPATH = tb/${TESTBENCHFILE}$(VHDLEX)
-TESTBENCHFILE = bench_alu
+TESTBENCHFILE = bench_decoder
 
 #GHDL CONFIG
 GHDL_CMD = ghdl
@@ -13,7 +13,7 @@ SIMDIR = simulation
 STOP_TIME = 2000000ns
 
 # Simulation break condition
-GHDL_FLAGS  = --ieee=synopsys --warn-no-vital-generic
+GHDL_FLAGS  = --ieee=synopsys --std=08 --warn-no-vital-generic
 GHDL_SIM_OPT = --stop-time=$(STOP_TIME)
 
 WAVEFORM_VIEWER = gtkwave
