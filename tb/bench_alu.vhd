@@ -32,7 +32,7 @@ begin
 
 
 	clk <= not(clk) after 10 ns;
-	reset <= '1','0' after 45 ns;
+	reset <= '1','0' after 30 ns;
 
 	simulation : process
 	begin
