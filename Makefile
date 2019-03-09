@@ -4,12 +4,12 @@ VHDLEX = .vhd
 
 # testbench
 TESTBENCHFILE = tb/${TESTBENCH}$(VHDLEX)
-TESTBENCH = bench_gpr
+TESTBENCH = bench_decoder
 
 #GHDL CONFIG
 GHDL_CMD = ghdl
 
-SIM_DIR = simulation
+SIM_DIR = simulation/$(TESTBENCH)
 STOP_TIME = 2000000ns
 
 # Simulation break condition
@@ -17,8 +17,8 @@ GHDL_FLAGS  = --ieee=synopsys --std=08 --warn-no-vital-generic
 GHDL_SIM_OPT = --stop-time=$(STOP_TIME)
 
 WAVEFORM_VIEWER = gtkwave
-WAVEFILE = $(SIM_DIR)/work/$(TESTBENCH).ghw
-SAVEFILE = $(SIM_DIR)/$(TESTBENCH).gtkw
+WAVEFILE = $(SIM_DIR)/$(TESTBENCH).ghw
+SAVEFILE = simulation/$(TESTBENCH).gtkw
 
 .PHONY: clean all view
 
@@ -32,17 +32,17 @@ view : $(WAVEFILE)
 $(SIM_DIR)/$(TESTBENCH).bin: $(FILES) $(TESTBENCHFILE) $(TOOLSFILE)
 	
 	#Set the working directory
-	mkdir -p $(SIM_DIR)/work
+	mkdir -p $(SIM_DIR)/
 	
 	#Importing the sources
 	@echo "Importing ..."
-	$(GHDL_CMD) -i $(GHDL_FLAGS)  --workdir=$(SIM_DIR)/work --work=lib_VHDL $^
+	$(GHDL_CMD) -i $(GHDL_FLAGS)  --workdir=$(SIM_DIR)/ --work=lib_VHDL $^
 	#Compiling the sources
 	@echo "Starting make .."
-	@$(GHDL_CMD) -m  $(GHDL_FLAGS)  --workdir=$(SIM_DIR)/work --work=lib_VHDL $(TESTBENCH)
+	@$(GHDL_CMD) -m  $(GHDL_FLAGS)  --workdir=$(SIM_DIR)/ --work=lib_VHDL $(TESTBENCH)
 	
 	#Cleaning of the directory
-	mv e~$(TESTBENCH).o $(SIM_DIR)/work/
+	mv e~$(TESTBENCH).o $(SIM_DIR)/
 	mv $(TESTBENCH) $(SIM_DIR)/$(TESTBENCH).bin
 
 # Running and generation of the wavefile
@@ -53,3 +53,4 @@ $(WAVEFILE): $(SIM_DIR)/$(TESTBENCH).bin
 #Cleaning the working directory and the binary files
 clean:
 	@rm -rf $(SIM_DIR)
+	@rm -rf simulation/$(TESTBENCH).*
