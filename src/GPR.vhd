@@ -36,7 +36,7 @@ begin
 	begin
 		if reset = '1' then
 			for i in 0 to 15 loop
-				registers(i) <= (others => '0');
+				registers(i) <= std_logic_vector(to_unsigned(i,32));
 			end loop;
 		elsif rising_edge(clk) then
 			if write_en_in = '1' then

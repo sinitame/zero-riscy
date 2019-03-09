@@ -34,8 +34,8 @@ begin
 			--------------------------------------------------------------
 			------------------ ARITHMETIC OPERATIONS ---------------------
 			--------------------------------------------------------------
-			when TEST_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
-			when TEST_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
+			when ALU_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
+			when ALU_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
 			when TEST_INC => result <= signed('0' & operand_a_in) + 1;
 			when TEST_DEC => result <= signed('0' & operand_a_in) - 1;
 			
