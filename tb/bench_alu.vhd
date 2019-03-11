@@ -36,37 +36,38 @@ begin
 
 	simulation : process
 	begin
-		A <= "00000000000000000000000000000001";
-		B <= "00000000000000000000000000000001";
+		A <= "00000000000000000000000010000011";
+		B <= "00000000000000000000000000000101";
 		
 		-- Test ADD
 		wait until rising_edge(clk);
-			op <= TEST_ADD;
+			op <= ALU_ADD;
 		-- Test SUB
 		wait until rising_edge(clk);
-			op <= TEST_SUB;
-		-- Test INC
-		wait until rising_edge(clk);
-			op <= TEST_INC;
-		-- Test DEC
-		wait until rising_edge(clk);
-			op <= TEST_DEC;
+			op <= ALU_SUB;
 
 		-- Test AND
 		wait until rising_edge(clk);
-			op <= TEST_AND;
+			op <= ALU_AND;
 		-- Test OR
 		wait until rising_edge(clk);
-			op <= TEST_OR;
+			op <= ALU_OR;
 		-- Test XOR
 		wait until rising_edge(clk);
-			op <= TEST_XOR;
-		-- Test NOT
+			op <= ALU_XOR;
+		-- Test SLTS
 		wait until rising_edge(clk);
-			op <= TEST_NOT;
+			op <= ALU_SLTS;
+		-- Test SLTU
+		wait until rising_edge(clk);
+			op <= ALU_SLTU;
+		
 		-- Test SHIFT LEFT
 		wait until rising_edge(clk);
-			op <= TEST_SHIFT;
+			op <= ALU_SLL;
+		-- Test SHIFT RIGHT
+		wait until rising_edge(clk);
+			op <= ALU_SRL;
 
 		wait for 10 ns;
 	end process simulation;

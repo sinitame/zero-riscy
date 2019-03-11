@@ -16,6 +16,7 @@ entity decoder is
 
 			rA_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
 			rB_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
+			rC_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
 			imm_out			: out std_logic_vector(31 downto 0);
 			
 			operator_out	: out std_logic_vector(ALU_OP_WIDTH-1 downto 0); 
@@ -36,6 +37,7 @@ begin
 		if reset = '1' then
 			rA_out		<= (others => '0');
 			rB_out		<= (others => '0');
+			rC_out		<= (others => '0');
 			imm_out		<= (others => '0');
 			operator_out <= (others => '0');
 			write_en_out <= '0';
@@ -57,19 +59,27 @@ begin
 			--		-- (S) : Memory store
 				when OPCODE_OP_IMM =>
 					-- Imm ALU op
-					rA_out			<= (others => '0');
+					rA_out			<= instruction_in(19 downto 15);
 					rB_out			<= (others => '0');
+					rC_out			<= instruction_in(11 downto 7);
 					imm_out			<= imm12_complement & instruction_in(31 downto 20);
 					imm_en_out		<= '1';
 					write_en_out	<= '1';
 					
 					case instruction_in(14 downto 12)  is
-						when  OP_ALU_ADDI	=> operator_out <= ALU_ADD;
-						when  OP_ALU_SLTI	=> operator_out <= ALU_SLTS;
-						when  OP_ALU_SLTUI	=> operator_out <= ALU_SLTU;
-						when  OP_ALU_XORI	=> operator_out <= ALU_XOR;
-						when  OP_ALU_ORI	=> operator_out <= ALU_OR;
-						when  OP_ALU_ANDI	=> operator_out <= ALU_AND;
+						when  OP_ALU_ADDI	=> operator_out <= ALU_ADD; --
+						when  OP_ALU_SLTI	=> operator_out <= ALU_SLTS; --
+						when  OP_ALU_SLTUI	=> operator_out <= ALU_SLTU; --
+						when  OP_ALU_XORI	=> operator_out <= ALU_XOR; --
+						when  OP_ALU_ORI	=> operator_out <= ALU_OR; --
+						when  OP_ALU_ANDI	=> operator_out <= ALU_AND; --
+						when  OP_ALU_SLLI	=> operator_out <= ALU_SLL; --
+						when  OP_ALU_SRI	=>
+							if instruction_in(30) = '0' then
+								operator_out <= ALU_SRL; --
+							else
+								operator_out <= ALU_SRA; --
+							end if;
 						when others => --nothing
 					end case;
 
@@ -77,22 +87,23 @@ begin
 					-- Reg ALU op
 					rA_out			<= instruction_in(19 downto 15);
 					rB_out			<= instruction_in(24 downto 20);
+					rC_out			<= instruction_in(11 downto 7);
 					imm_out			<= (others => '0');
 					imm_en_out		<= '0';
 					write_en_out	<= '1';
 
 					alu_operation :=  instruction_in(30 downto 25) & instruction_in(14 downto 12);
 					case alu_operation is
-						when OP_ALU_ADD => operator_out <= ALU_ADD;
-						when OP_ALU_SUB => operator_out <= ALU_SUB;
-						when OP_ALU_SLL	=> operator_out <= ALU_SLL;
-						when OP_ALU_SLT	=> operator_out <= ALU_SLTS;
-						when OP_ALU_SLTU=> operator_out <= ALU_SLTU;
-						when OP_ALU_XOR	=> operator_out <= ALU_XOR;
-						when OP_ALU_SRL	=> operator_out <= ALU_SRL;
-						when OP_ALU_SRA	=> operator_out <= ALU_SRA;
-						when OP_ALU_OR	=> operator_out <= ALU_OR;
-						when OP_ALU_AND	=> operator_out <= ALU_AND;
+						when OP_ALU_ADD => operator_out <= ALU_ADD; --
+						when OP_ALU_SUB => operator_out <= ALU_SUB; --
+						when OP_ALU_SLL	=> operator_out <= ALU_SLL; --
+						when OP_ALU_SLT	=> operator_out <= ALU_SLTS; --
+						when OP_ALU_SLTU=> operator_out <= ALU_SLTU; --
+						when OP_ALU_XOR	=> operator_out <= ALU_XOR; --
+						when OP_ALU_SRL	=> operator_out <= ALU_SRL; --
+						when OP_ALU_SRA	=> operator_out <= ALU_SRA; --
+						when OP_ALU_OR	=> operator_out <= ALU_OR; --
+						when OP_ALU_AND	=> operator_out <= ALU_AND; --
 						when others => --nothing
 					end case;
 

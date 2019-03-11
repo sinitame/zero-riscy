@@ -16,6 +16,7 @@ architecture arch of bench_decoder is
 	signal instruction		: std_logic_vector(31 downto 0)	:= (others => '0');
 	signal rA				: std_logic_vector(4 downto 0)	:= (others => '0');
 	signal rB				: std_logic_vector(4 downto 0)	:= (others => '0');
+	signal rC				: std_logic_vector(4 downto 0)	:= (others => '0');
 	signal imm				: std_logic_vector(31 downto 0)	:= (others => '0');
 	signal operator			: std_logic_vector(5 downto 0)	:= (others => '0');
 	signal write_en			: std_logic						:= '0';
@@ -29,6 +30,7 @@ begin
 				instruction_in		=> instruction,
 				rA_out				=> rA,
 				rB_out				=> rB,
+				rC_out				=> rC,
 				imm_out				=> imm,
 				operator_out		=> operator,
 				write_en_out		=> write_en,

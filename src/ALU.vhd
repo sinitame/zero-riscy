@@ -36,22 +36,34 @@ begin
 			--------------------------------------------------------------
 			when ALU_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
 			when ALU_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
-			when TEST_INC => result <= signed('0' & operand_a_in) + 1;
-			when TEST_DEC => result <= signed('0' & operand_a_in) - 1;
-			
+
 			--------------------------------------------------------------
 			--------------------- LOGIC OPERATIONS -----------------------
 			--------------------------------------------------------------
 
-			when TEST_AND => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
-			when TEST_OR => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
-			when TEST_XOR => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
-			when TEST_NOT => result <= signed(not ('0' & operand_a_in));  -- NOT
-
+			when ALU_AND => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
+			when ALU_OR => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
+			when ALU_XOR => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+			when ALU_SLTS =>
+				if to_integer(signed(operand_a_in)) < to_integer(signed(operand_b_in)) then
+					result <= to_signed(1,33);
+				else
+					result <= to_signed(0,33);
+				end if;
+			when ALU_SLTU =>
+				if to_integer(unsigned(operand_a_in)) < to_integer(unsigned(operand_b_in)) then
+					result <= to_signed(1,33);
+				else
+					result <= to_signed(0,33);
+				end if;
 			--------------------------------------------------------------
 			---------------------- SHIFT OPERATIONS ----------------------
 			--------------------------------------------------------------
-			when TEST_SHIFT => result <= signed(operand_a_in(31 downto 0) & '0');
+			when ALU_SRL => result <= signed(shift_right(unsigned('0' & operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+			when ALU_SLL => result <= signed(shift_left(unsigned('0'& operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+			when ALU_SRA => result <= signed(shift_right(signed('0' & operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+			
+			
 			when others => result <= "000000000000000000000000000000000";
 		end case;
 	end process calculation;

@@ -37,6 +37,8 @@ package defines is
 	constant OP_ALU_XORI	: std_logic_vector(2 downto 0) := "100";
 	constant OP_ALU_ORI		: std_logic_vector(2 downto 0) := "110";
 	constant OP_ALU_ANDI	: std_logic_vector(2 downto 0) := "111";
+	constant OP_ALU_SLLI	: std_logic_vector(2 downto 0) := "001";
+	constant OP_ALU_SRI		: std_logic_vector(2 downto 0) := "101";
 
 	--------------------------------------------------------------
 	------------------- ALU operations codes ---------------------

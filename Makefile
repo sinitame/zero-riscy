@@ -4,7 +4,7 @@ VHDLEX = .vhd
 
 # testbench
 TESTBENCHFILE = tb/${TESTBENCH}$(VHDLEX)
-TESTBENCH = bench_decoder
+TESTBENCH = bench_alu
 
 #GHDL CONFIG
 GHDL_CMD = ghdl
