@@ -47,6 +47,7 @@ begin
 					instruction_in	=> instruction,
 					rA_out			=> rA,
 					rB_out			=> rB,
+					rC_out			=> rC,
 					imm_out			=> imm,
 					operator_out	=> Op_out,
 					write_en_out	=> write_en,
@@ -69,19 +70,19 @@ begin
 		-----------------------------------------
 		-------------- Operand A ----------------
 		-----------------------------------------
-		mux_operand_a : process(imm_en,rA_data, imm,clk)
-		begin
-			case imm_en is
-				when '0' => OpA_out <= rA_data;
-				when '1' => OpA_out <= imm;
-				when others =>
-			end case;
-		end process;
+		OpA_out <= rA_data;
 
 		-----------------------------------------
 		-------------- Operand B ----------------
 		-----------------------------------------
-		OpB_out <= rB_data;
+		mux_operand_b : process(imm_en,rB_data, imm,clk)
+		begin
+			case imm_en is
+				when '0' => OpB_out <= rB_data;
+				when '1' => OpB_out <= imm;
+				when others =>
+			end case;
+		end process;
 
 		-----------------------------------------
 		-------------- Result -------------------

@@ -48,7 +48,7 @@ begin
 
 	simulation : process
 	begin
-		wait for 30 ns;
+		wait for 20 ns;
 		wait until rising_edge(clk);
 		-- Test ADD
 			inst <= "0000000"&"00001"&"00010"&"000"&"00011"&"0110011";
