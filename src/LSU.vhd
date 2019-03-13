@@ -10,8 +10,6 @@ entity LSU is
 			addr_out	: out std_logic_vector(31 downto 0);
 			rdata_in	: in std_logic_vector(31 downto 0);
 			wdata_out	: out std_logic_vector(31 downto 0);
-			read_en_out	: out std_logic;
-			write_en_out: out std_logic;
 
 			alu_result_in: in std_logic_vector(31 downto 0);
 			register_data_in: in std_logic_vector(31 downto 0);
@@ -26,23 +24,6 @@ end entity;
 architecture arch of LSU is
 begin
 
-	load : process
-	begin
-		if (load_en_in = '1') then
-			read_en_out <= '1';
-		else
-			read_en_out <= '0';
-		end if;
-	end process;
-
-	store : process (clk)
-	begin
-		if (store_en_in = '1') then
-			write_en_out <= '1';
-		else
-			write_en_out <= '0';
-		end if;
-	end process;
 
 	wdata_out <= register_data_in;
 	rdata_out <= rdata_in;

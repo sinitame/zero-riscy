@@ -18,10 +18,12 @@ entity decoder is
 			rB_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
 			rC_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
 			imm_out			: out std_logic_vector(31 downto 0);
-			
-			operator_out	: out std_logic_vector(ALU_OP_WIDTH-1 downto 0); 
+			operator_out	: out std_logic_vector(ALU_OP_WIDTH-1 downto 0);
+
 			write_en_out	: out std_logic;
-			imm_en_out		: out std_logic
+			imm_en_out		: out std_logic;
+			load_en_out		: out std_logic;
+			store_en_out	: out std_logic
 
 		);
 end decoder;
@@ -42,6 +44,8 @@ begin
 			operator_out <= (others => '0');
 			write_en_out <= '0';
 			imm_en_out <= '0';
+			load_en_out <= '0';
+			store_en_out <= '0';
 		else
 			opcode := instruction_in(6 downto 0);
 			case opcode is
@@ -53,10 +57,30 @@ begin
 			--		-- (JALR): Unconditionnal jump Reg
 			--	when OPCODE_JUMP =>
 			--		-- (B) : Conditional Jump
-			--	when OPCODE_LOAD =>
-			--		-- (L) : Memory load
-			--	when OPCODE_STORE =>
-			--		-- (S) : Memory store
+				when OPCODE_LOAD =>
+					-- (L) : Memory load
+					rA_out			<= instruction_in(19 downto 15);
+					rB_out			<= (others => '0');
+					rC_out			<= instruction_in(11 downto 7);
+					imm_out			<= imm12_complement & instruction_in(31 downto 20);
+					imm_en_out		<= '1';
+					write_en_out	<= '1';
+					load_en_out		<= '1';
+					store_en_out	<= '0';
+					operator_out	<= ALU_ADD;
+
+				when OPCODE_STORE =>
+					-- (S) : Memory store
+					rA_out			<= instruction_in(19 downto 15);
+					rB_out			<= (others => '0');
+					rC_out			<= instruction_in(11 downto 7);
+					imm_out			<= imm12_complement & instruction_in(31 downto 25) & instruction_in(11 downto 7);
+					imm_en_out		<= '1';
+					write_en_out	<= '1';
+					load_en_out		<= '0';
+					store_en_out	<= '1';
+					operator_out	<= ALU_ADD;
+
 				when OPCODE_OP_IMM =>
 					-- Imm ALU op
 					rA_out			<= instruction_in(19 downto 15);

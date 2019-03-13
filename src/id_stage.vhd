@@ -18,7 +18,10 @@ entity id_stage is
 			OpB_out				: out std_logic_vector(31 downto 0);
 			Op_out				: out std_logic_vector(ALU_OP_WIDTH-1 downto 0);
 
-			alu_result_in		: in std_logic_vector(31 downto 0)
+			alu_result_in		: in std_logic_vector(31 downto 0);
+			mem_data_in			: in std_logic_vector(31 downto 0);
+			load_en_out			: out std_logic;
+			store_en_out		: out std_logic
 		);
 
 end id_stage;
@@ -32,6 +35,8 @@ architecture arch of id_stage is
 	signal imm			: std_logic_vector(31 downto 0);
 	signal write_en		: std_logic;
 	signal imm_en		: std_logic;
+	signal load_en		: std_logic;
+	signal store_en		: std_logic;
 
 	signal rA_data		: std_logic_vector(31 downto 0);
 	signal rB_data		: std_logic_vector(31 downto 0);
@@ -51,7 +56,9 @@ begin
 					imm_out			=> imm,
 					operator_out	=> Op_out,
 					write_en_out	=> write_en,
-					imm_en_out		=> imm_en
+					imm_en_out		=> imm_en,
+					load_en_out		=> load_en,
+					store_en_out	=> store_en
 				 );
 	
 	GPR : entity lib_VHDL.GPR
@@ -85,8 +92,15 @@ begin
 		end process;
 
 		-----------------------------------------
-		-------------- Result -------------------
+		------------ Writing register -----------
 		-----------------------------------------
-		rC_data <= alu_result_in;
+		mux_write_data : process(load_en,mem_data_in,alu_result_in)
+		begin
+			case load_en is
+				when '0' => rC_data <= alu_result_in;
+				when '1' => rC_data <= mem_data_in;
+				when others =>
+			end case;
+		end process;
 
 end arch;

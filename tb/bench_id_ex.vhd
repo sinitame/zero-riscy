@@ -51,11 +51,11 @@ begin
 		wait for 20 ns;
 		wait until rising_edge(clk);
 		-- Test ADD
-			inst <= "0000000"&"00001"&"00010"&"000"&"00011"&"0110011";
+			inst <= "0000000"&"00001"&"00010"&"000"&"00111"&"0110011";
 
 		wait until rising_edge(clk);
 		-- Test SUB
-			inst <= "0100000"&"00001"&"00010"&"000"&"00011"&"0110011";
+			inst <= "0100000"&"00111"&"00010"&"000"&"00011"&"0110011";
 
 		wait until rising_edge(clk);
 		-- Test ADDI
