@@ -35,13 +35,13 @@ architecture arch of id_stage is
 	signal imm			: std_logic_vector(31 downto 0);
 	signal write_en		: std_logic;
 	signal imm_en		: std_logic;
-	signal load_en		: std_logic;
-	signal store_en		: std_logic;
 
 	signal rA_data		: std_logic_vector(31 downto 0);
 	signal rB_data		: std_logic_vector(31 downto 0);
 	signal rC_data		: std_logic_vector(31 downto 0);
 
+	signal load_en		: std_logic;
+	signal store_en		: std_logic;
 
 	
 begin
@@ -102,5 +102,8 @@ begin
 				when others =>
 			end case;
 		end process;
+
+		load_en_out <= load_en;
+		store_en_out <= store_en;
 
 end arch;

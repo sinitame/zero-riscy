@@ -62,28 +62,39 @@ begin
 			load_en_in		=> load_en,
 			store_en_in		=> store_en
 				);
+
+	RAM : entity lib_vhdl.ram
+		port map(
+			addr_in			=> addr,
+			data_in			=> wdata,
+			data_out		=> rdata,
+			write_en_in		=> store_en,
+			read_en_in		=> load_en,
+			reset			=> reset,
+			clk				=> clk
+				);
 	
 	clk <= not(clk) after 10 ns;
 	reset <= '1','0' after 30 ns;
 
 	simulation : process
 	begin
-		wait for 20 ns;
+		wait for 30 ns;
 		wait until rising_edge(clk);
-		-- Test ADD
+		-- Test ADD R2,R1 -> R7 (R7 = 1+2=3)
 			inst <= "0000000"&"00001"&"00010"&"000"&"00111"&"0110011";
 
 		wait until rising_edge(clk);
-		-- Test SUB
+		-- Test SUB R2,R7 -> R3 (R3 = 2-3=-1)
 			inst <= "0100000"&"00111"&"00010"&"000"&"00011"&"0110011";
 
 		wait until rising_edge(clk);
-		-- Test LOAD
-			inst <= "000000000010"&"00001"&"000"&"00011"&"0000011";
+		-- Test LOAD R2 <- RAM(R1+2) (R2 = RAM(2+1))
+			inst <= "000000000010"&"00001"&"000"&"00010"&"0000011";
 
 		wait until rising_edge(clk);
-		-- Test STORE
-			inst <= "000000000110"&"00001"&"000"&"00011"&"0100011";
+		-- Test STORE RAM(R4+3) <- R1 (RAM(7) = 1)
+			inst <= "0000000"&"00001"&"00100"&"000"&"00011"&"0100011";
 		
 		wait for 10 ns;
 	end process simulation;

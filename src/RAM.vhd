@@ -16,9 +16,9 @@ end entity RAM;
 
 architecture arch of RAM is
 
-	-- RAM 128 x 4 Bytes.
+	-- RAM 32 x 4 Bytes.
 	constant low_address  : natural := 0;
-	constant high_address : natural := 2**8-1;
+	constant high_address : natural := 2**5-1;
 
 	type type_mem is array (low_address to high_address) of std_logic_vector(31 downto 0);
 
@@ -37,7 +37,9 @@ begin
 	process (clk)
 	begin
 		if reset = '1' then
-			mem_ram <= (others => (others => '0'));
+			for i in 0 to 31 loop
+				mem_ram(i) <= std_logic_vector(to_signed(i,32));
+			end loop;
 		elsif rising_edge(clk) then
 			if (write_en_in = '1') then
 				mem_ram(to_integer(unsigned(addr_in))) <= data_in;

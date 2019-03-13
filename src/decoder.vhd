@@ -89,6 +89,8 @@ begin
 					imm_out			<= imm12_complement & instruction_in(31 downto 20);
 					imm_en_out		<= '1';
 					write_en_out	<= '1';
+					load_en_out		<= '0';
+					store_en_out	<= '0';
 					
 					case instruction_in(14 downto 12)  is
 						when  OP_ALU_ADDI	=> operator_out <= ALU_ADD; --
@@ -115,6 +117,8 @@ begin
 					imm_out			<= (others => '0');
 					imm_en_out		<= '0';
 					write_en_out	<= '1';
+					load_en_out		<= '0';
+					store_en_out	<= '0';
 
 					alu_operation :=  instruction_in(30 downto 25) & instruction_in(14 downto 12);
 					case alu_operation is
