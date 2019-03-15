@@ -25,7 +25,7 @@ architecture arch of RAM is
 	signal mem_ram : type_mem;
 
 begin
-	process(read_en_in)
+	process(addr_in, read_en_in)
 	begin
 		if (read_en_in = '1') then
 			data_out <= mem_ram(to_integer(unsigned(addr_in)));
@@ -34,7 +34,7 @@ begin
 		end if;
 	end process;
 
-	process (clk)
+	process(reset, addr_in, write_en_in,clk)
 	begin
 		if reset = '1' then
 			for i in 0 to 31 loop

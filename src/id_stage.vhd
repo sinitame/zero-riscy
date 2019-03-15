@@ -20,6 +20,7 @@ entity id_stage is
 
 			alu_result_in		: in std_logic_vector(31 downto 0);
 			mem_data_in			: in std_logic_vector(31 downto 0);
+			wdata_out			: out std_logic_vector(31 downto 0);
 			load_en_out			: out std_logic;
 			store_en_out		: out std_logic
 		);
@@ -105,5 +106,6 @@ begin
 
 		load_en_out <= load_en;
 		store_en_out <= store_en;
+		wdata_out <= rB_data;
 
 end arch;

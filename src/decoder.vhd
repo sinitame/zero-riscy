@@ -72,11 +72,11 @@ begin
 				when OPCODE_STORE =>
 					-- (S) : Memory store
 					rA_out			<= instruction_in(19 downto 15);
-					rB_out			<= (others => '0');
-					rC_out			<= instruction_in(11 downto 7);
+					rB_out			<= instruction_in(24 downto 20);
+					rC_out			<= (others => '0');
 					imm_out			<= imm12_complement & instruction_in(31 downto 25) & instruction_in(11 downto 7);
 					imm_en_out		<= '1';
-					write_en_out	<= '1';
+					write_en_out	<= '0';
 					load_en_out		<= '0';
 					store_en_out	<= '1';
 					operator_out	<= ALU_ADD;
