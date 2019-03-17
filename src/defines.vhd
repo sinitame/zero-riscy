@@ -3,18 +3,28 @@ use ieee.std_logic_1164.all;
 
 package defines is
 	--------------------------------------------------------------
-	----------- Simple ALU operations (testing purpose) ----------
+	------------------------ Mux codes ---------------------------
 	--------------------------------------------------------------
+	constant A_REG	: std_logic_vector(1 downto 0) := "00";
+	constant A_PC	: std_logic_vector(1 downto 0) := "01";
+	constant A_ZERO	: std_logic_vector(1 downto 0) := "10";
+	
+	constant B_REG	: std_logic_vector(1 downto 0) := "00";
+	constant B_IMM	: std_logic_vector(1 downto 0) := "01";
+	constant B_PC4	: std_logic_vector(1 downto 0) := "10";
 
-	constant TEST_ADD		: std_logic_vector(5 downto 0)	:= "000000";
-	constant TEST_SUB		: std_logic_vector(5 downto 0)	:= "000001";
-	constant TEST_INC		: std_logic_vector(5 downto 0)	:= "000010";
-	constant TEST_DEC		: std_logic_vector(5 downto 0)	:= "000011";
-	constant TEST_AND		: std_logic_vector(5 downto 0)	:= "000100";
-	constant TEST_OR		: std_logic_vector(5 downto 0)	:= "000101";
-	constant TEST_XOR		: std_logic_vector(5 downto 0)	:= "000110";
-	constant TEST_NOT		: std_logic_vector(5 downto 0)	:= "000111";
-	constant TEST_SHIFT		: std_logic_vector(5 downto 0)	:= "001000";
+	constant PC_INC	: std_logic_vector(1 downto 0) := "00";
+	constant PC_BOOT: std_logic_vector(1 downto 0) := "01";
+	constant PC_JUMP: std_logic_vector(1 downto 0) := "10";
+	--------------------------------------------------------------
+	------------------- Branch types code ------------------------
+	--------------------------------------------------------------
+	constant BRANCH_EQ	: std_logic_vector(2 downto 0) := "000";
+	constant BRANCH_NE	: std_logic_vector(2 downto 0) := "001";
+	constant BRANCH_LT	: std_logic_vector(2 downto 0) := "100";
+	constant BRANCH_GE	: std_logic_vector(2 downto 0) := "101";
+	constant BRANCH_LTU	: std_logic_vector(2 downto 0) := "110";
+	constant BRANCH_GEU	: std_logic_vector(2 downto 0) := "111";
 	
 	--------------------------------------------------------------
 	------------------- ALU instruction code  --------------------
@@ -115,7 +125,7 @@ package defines is
 	constant OPCODE_LUI		: std_logic_vector(6 downto 0) := "0110111";
 	constant OPCODE_JAL		: std_logic_vector(6 downto 0) := "1101111";
 	constant OPCODE_JALR	: std_logic_vector(6 downto 0) := "1100111";
-	constant OPCODE_JUMP	: std_logic_vector(6 downto 0) := "1100011";
+	constant OPCODE_BRANCH	: std_logic_vector(6 downto 0) := "1100011";
 	constant OPCODE_LOAD	: std_logic_vector(6 downto 0) := "0000011";
 	constant OPCODE_STORE	: std_logic_vector(6 downto 0) := "0100011";
 	constant OPCODE_OP_REG	: std_logic_vector(6 downto 0) := "0110011";
