@@ -34,37 +34,112 @@ begin
 			--------------------------------------------------------------
 			------------------ ARITHMETIC OPERATIONS ---------------------
 			--------------------------------------------------------------
-			when ALU_ADD => result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
-			when ALU_SUB => result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
+			when ALU_ADD => 
+				result <= signed('0' & operand_a_in) + signed('0' & operand_b_in);
+				comparison_result_out <= '0';
+			when ALU_SUB => 
+				result <= signed('0' & operand_a_in) - signed('0' & operand_b_in);
+				comparison_result_out <= '0';
 
 			--------------------------------------------------------------
 			--------------------- LOGIC OPERATIONS -----------------------
 			--------------------------------------------------------------
 
-			when ALU_AND => result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
-			when ALU_OR => result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
-			when ALU_XOR => result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+			when ALU_AND =>
+				result <= signed(('0' & operand_a_in) and ('0' & operand_b_in));  -- AND
+				comparison_result_out <= '0';
+			when ALU_OR =>
+				result <= signed(('0' & operand_a_in) or ('0' & operand_b_in));  -- OR
+				comparison_result_out <= '0';
+			when ALU_XOR =>
+				result <= signed(('0' & operand_a_in) xor ('0' & operand_b_in));  -- XOR
+				comparison_result_out <= '0';
 			when ALU_SLTS =>
 				if to_integer(signed(operand_a_in)) < to_integer(signed(operand_b_in)) then
 					result <= to_signed(1,33);
 				else
 					result <= to_signed(0,33);
 				end if;
+				comparison_result_out <= '0';
 			when ALU_SLTU =>
 				if to_integer(unsigned(operand_a_in)) < to_integer(unsigned(operand_b_in)) then
 					result <= to_signed(1,33);
 				else
 					result <= to_signed(0,33);
 				end if;
+				comparison_result_out <= '0';
+
+			--------------------------------------------------------------
+			------------------ COMPARISON OPERATIONS ---------------------
+			--------------------------------------------------------------
+
+			when  ALU_EQ  => 
+				if to_integer(signed(operand_a_in)) = to_integer(signed(operand_b_in)) then
+					comparison_result_out <= '1';
+					result <= to_signed(1,33);
+				else
+					comparison_result_out <= '0';
+					result <= to_signed(0,33);
+				end if;
+			when  ALU_NE  =>
+				if not (to_integer(signed(operand_a_in)) = to_integer(signed(operand_b_in))) then
+					comparison_result_out <= '1';
+					result <= to_signed(1,33);
+				else
+					comparison_result_out <= '0';
+					result <= to_signed(0,33);
+				end if;
+			when  ALU_LTS =>
+				if to_integer(signed(operand_a_in)) < to_integer(signed(operand_b_in)) then
+					comparison_result_out <= '1';
+					result <= to_signed(1,33);
+				else
+					comparison_result_out <= '0';
+					result <= to_signed(0,33);
+				end if;
+			when  ALU_GES =>
+				if (to_integer(signed(operand_a_in)) > to_integer(signed(operand_b_in)))
+				or (to_integer(signed(operand_a_in)) = to_integer(signed(operand_b_in))) then
+					comparison_result_out <= '1';
+					result <= to_signed(1,33);
+				else
+					comparison_result_out <= '0';
+					result <= to_signed(0,33);
+				end if;
+			when  ALU_LTU =>
+				if to_integer(unsigned(operand_a_in)) < to_integer(unsigned(operand_b_in)) then
+					comparison_result_out <= '1';
+					result <= to_signed(1,33);
+				else
+					comparison_result_out <= '0';
+					result <= to_signed(0,33);
+				end if;
+			when  ALU_GEU =>
+				if (to_integer(unsigned(operand_a_in)) > to_integer(unsigned(operand_b_in)))
+				or (to_integer(unsigned(operand_a_in)) = to_integer(unsigned(operand_b_in))) then
+					comparison_result_out <= '1';
+					result <= to_signed(1,33);
+				else
+					comparison_result_out <= '0';
+					result <= to_signed(0,33);
+				end if;
 			--------------------------------------------------------------
 			---------------------- SHIFT OPERATIONS ----------------------
 			--------------------------------------------------------------
-			when ALU_SRL => result <= signed(shift_right(unsigned('0' & operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
-			when ALU_SLL => result <= signed(shift_left(unsigned('0'& operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
-			when ALU_SRA => result <= signed(shift_right(signed('0' & operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+			when ALU_SRL =>
+				result <= signed(shift_right(unsigned('0' & operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+				comparison_result_out <= '0';
+			when ALU_SLL =>
+				result <= signed(shift_left(unsigned('0'& operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+				comparison_result_out <= '0';
+			when ALU_SRA =>
+				result <= signed(shift_right(signed('0' & operand_a_in),to_integer(unsigned(operand_b_in(4 downto 0)))));
+				comparison_result_out <= '0';
 			
 			
-			when others => result <= "000000000000000000000000000000000";
+			when others =>
+				result <= "000000000000000000000000000000000";
+				comparison_result_out <= '0';
 		end case;
 	end process calculation;
 
