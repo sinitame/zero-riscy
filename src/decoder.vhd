@@ -14,14 +14,21 @@ entity decoder is
 			reset			: in std_logic;
 			instruction_in	: in std_logic_vector(31 downto 0);
 
+			-- Signals to GPR
 			rA_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
 			rB_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
 			rC_out			: out std_logic_vector(GPR_WIDTH-1 downto 0);
+			write_en_out	: out std_logic;
+
+			-- Signals to ALU
+			mux_a_out		: out std_logic_vector(1 downto 0);
+			mux_b_out		: out std_logic_vector(1 downto 0);
 			imm_out			: out std_logic_vector(31 downto 0);
 			operator_out	: out std_logic_vector(ALU_OP_WIDTH-1 downto 0);
 
-			write_en_out	: out std_logic;
-			imm_en_out		: out std_logic;
+			jump_ex_in		: in std_logic;
+			branch_ex_in	: in std_logic;
+
 			load_en_out		: out std_logic;
 			store_en_out	: out std_logic
 
@@ -31,10 +38,11 @@ end decoder;
 architecture arch of decoder is
 begin
 
-	op_code_parse : process(instruction_in,operator_out,reset)
+	op_code_parse : process(instruction_in,jump_ex_in, branch_ex_in,reset)
 		variable alu_operation : std_logic_vector(8 downto 0);
 		variable opcode : std_logic_vector(6 downto 0);
 		variable imm12_complement : std_logic_vector(19 downto 0) := (others => instruction_in(31));
+		variable imm20_complement : std_logic_vector(11 downto 0) := (others => instruction_in(31));
 	begin
 		if reset = '1' then
 			rA_out		<= (others => '0');
@@ -43,27 +51,106 @@ begin
 			imm_out		<= (others => '0');
 			operator_out <= (others => '0');
 			write_en_out <= '0';
-			imm_en_out <= '0';
+			mux_a_out <= (others => '0');
+			mux_b_out <= (others => '0');
 			load_en_out <= '0';
 			store_en_out <= '0';
 		else
 			opcode := instruction_in(6 downto 0);
 			case opcode is
-			--	when OPCODE_LUI =>
-			--		-- (LUI) : Load Imm
-			--	when OPCODE_JAL =>
-			--		-- (JAL) : Unconditionnal jump Imm
-			--	when OPCODE_JALR =>
-			--		-- (JALR): Unconditionnal jump Reg
-			--	when OPCODE_JUMP =>
-			--		-- (B) : Conditional Jump
+				when OPCODE_LUI =>
+					-- (LUI) : Load Imm
+					rA_out			<= (others => '0');
+					rB_out			<= (others => '0');
+					rC_out			<= instruction_in(11 downto 7);
+					imm_out			<= imm20_complement & instruction_in(31 downto 12);
+					mux_a_out		<= A_ZERO;
+					mux_b_out		<= B_IMM;
+					write_en_out	<= '1';
+					load_en_out		<= '0';
+					store_en_out	<= '0';
+					operator_out	<= ALU_ADD;
+				when OPCODE_JAL =>
+					-- (JAL) : Unconditionnal jump Imm
+					if not(jump_ex_in) then -- rC <- PC+4
+						rA_out			<= (others => '0');
+						rB_out			<= (others => '0');
+						rC_out			<= instruction_in(11 downto 7);
+						imm_out			<= imm12_complement & instruction_in(31 downto 20);
+						mux_a_out		<= A_PC;
+						mux_b_out		<= B_PC4;
+						write_en_out	<= '1';
+					else -- PC <- PC + imm12
+						rA_out			<= (others => '0');
+						rB_out			<= (others => '0');
+						rC_out			<= (others => '0');
+						imm_out			<= imm12_complement & instruction_in(31 downto 20);
+						mux_a_out		<= A_PC;
+						mux_b_out		<= B_IMM;
+						write_en_out	<= '0';
+					end if;
+					load_en_out		<= '0';
+					store_en_out	<= '0';
+					operator_out	<= ALU_ADD;
+
+				when OPCODE_JALR =>
+					-- (JALR): Unconditionnal jump Reg
+					if not(jump_ex_in) then -- rC <- PC+4
+						rA_out			<= (others => '0');
+						rB_out			<= (others => '0');
+						rC_out			<= instruction_in(11 downto 7);
+						imm_out			<= imm12_complement & instruction_in(31 downto 20);
+						mux_a_out		<= A_PC;
+						mux_b_out		<= B_PC4;
+						write_en_out	<= '1';
+					else -- PC <- rA_data + imm12
+						rA_out			<= instruction_in(19 downto 15);
+						rB_out			<= (others => '0');
+						rC_out			<= instruction_in(11 downto 7);
+						imm_out			<= imm12_complement & instruction_in(31 downto 20);
+						mux_a_out		<= A_REG;
+						mux_b_out		<= B_IMM;
+						write_en_out	<= '0';
+					end if;
+					load_en_out		<= '0';
+					store_en_out	<= '0';
+					operator_out	<= ALU_ADD;
+
+				when OPCODE_BRANCH =>
+					-- (B) : Conditional Jump
+					if branch_ex_in then
+						rA_out			<= (others => '0');
+						rB_out			<= (others => '0');
+						rC_out			<= (others => '0');
+						imm_out			<= imm12_complement & instruction_in(31 downto 20);
+						mux_a_out		<= A_PC;
+						mux_b_out		<= B_IMM;
+						operator_out	<= ALU_ADD;
+					else
+						case instruction_in(14 downto 12) is
+							when BRANCH_EQ	=> operator_out	<= ALU_EQ; --
+							when BRANCH_NE	=> operator_out	<= ALU_NE; --
+							when BRANCH_LT	=> operator_out	<= ALU_LTS; --
+							when BRANCH_GE	=> operator_out	<= ALU_GES; --
+							when BRANCH_LTU	=> operator_out	<= ALU_LTU; --
+							when BRANCH_GEU	=> operator_out	<= ALU_GEU; --
+							when others		=>
+						end case;
+						mux_a_out		<= A_REG;
+						mux_b_out		<= B_REG;
+					end if;
+					write_en_out	<= '0';
+					load_en_out		<= '0';
+					store_en_out	<= '0';
+
 				when OPCODE_LOAD =>
 					-- (L) : Memory load
 					rA_out			<= instruction_in(19 downto 15);
 					rB_out			<= (others => '0');
 					rC_out			<= instruction_in(11 downto 7);
 					imm_out			<= imm12_complement & instruction_in(31 downto 20);
-					imm_en_out		<= '1';
+					mux_a_out		<= A_REG;
+					mux_b_out		<= B_IMM;
 					write_en_out	<= '1';
 					load_en_out		<= '1';
 					store_en_out	<= '0';
@@ -75,7 +162,8 @@ begin
 					rB_out			<= instruction_in(24 downto 20);
 					rC_out			<= (others => '0');
 					imm_out			<= imm12_complement & instruction_in(31 downto 25) & instruction_in(11 downto 7);
-					imm_en_out		<= '1';
+					mux_a_out		<= A_REG;
+					mux_b_out		<= B_IMM;
 					write_en_out	<= '0';
 					load_en_out		<= '0';
 					store_en_out	<= '1';
@@ -87,7 +175,8 @@ begin
 					rB_out			<= (others => '0');
 					rC_out			<= instruction_in(11 downto 7);
 					imm_out			<= imm12_complement & instruction_in(31 downto 20);
-					imm_en_out		<= '1';
+					mux_a_out		<= A_REG;
+					mux_b_out		<= B_IMM;
 					write_en_out	<= '1';
 					load_en_out		<= '0';
 					store_en_out	<= '0';
@@ -115,7 +204,8 @@ begin
 					rB_out			<= instruction_in(24 downto 20);
 					rC_out			<= instruction_in(11 downto 7);
 					imm_out			<= (others => '0');
-					imm_en_out		<= '0';
+					mux_a_out		<= A_REG;
+					mux_b_out		<= B_REG;
 					write_en_out	<= '1';
 					load_en_out		<= '0';
 					store_en_out	<= '0';
@@ -141,7 +231,11 @@ begin
 					rB_out		<= (others => '0');
 					imm_out		<= (others => '0');
 					operator_out <= (others => '0');
-					write_en_out <= '1';
+					mux_a_out		<= (others => '0');
+					mux_b_out		<= (others => '0');
+					write_en_out	<= '0';
+					load_en_out		<= '0';
+					store_en_out	<= '0';
 			end case;
 		end if;
 	end process op_code_parse;
