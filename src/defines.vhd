@@ -5,15 +5,15 @@ package defines is
 	--------------------------------------------------------------
 	------------------------ Mux codes ---------------------------
 	--------------------------------------------------------------
-	constant A_REG	: std_logic_vector(1 downto 0) := "00";
+	constant A_REG	: std_logic_vector(1 downto 0) := "11";
 	constant A_PC	: std_logic_vector(1 downto 0) := "01";
 	constant A_ZERO	: std_logic_vector(1 downto 0) := "10";
 	
-	constant B_REG	: std_logic_vector(1 downto 0) := "00";
+	constant B_REG	: std_logic_vector(1 downto 0) := "11";
 	constant B_IMM	: std_logic_vector(1 downto 0) := "01";
 	constant B_PC4	: std_logic_vector(1 downto 0) := "10";
 
-	constant PC_INC	: std_logic_vector(1 downto 0) := "00";
+	constant PC_INC	: std_logic_vector(1 downto 0) := "11";
 	constant PC_BOOT: std_logic_vector(1 downto 0) := "01";
 	constant PC_JUMP: std_logic_vector(1 downto 0) := "10";
 	--------------------------------------------------------------
