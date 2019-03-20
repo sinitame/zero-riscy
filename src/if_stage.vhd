@@ -19,6 +19,7 @@ entity if_stage is
 			pc_en_in			: in std_logic;
 
 			instruction_out		: out std_logic_vector(31 downto 0);
+			pc_out				: out std_logic_vector(31 downto 0);
 			fetch_hit_out		: out std_logic
 		);
 end if_stage;
