@@ -178,12 +178,14 @@ begin
 	begin
 		if reset = '1' then
 			jump_ex <= '0';
-		elsif rising_edge(clk) and jump_en = '1' then
-			if jump_ex = '0' then
-				jump_ex <= '1';
-			end if;
-		elsif rising_edge(clk) and jump_en = '0' then
+		elsif rising_edge(clk) then
+			if jump_en = '1' then
+				if jump_ex = '0' then
+					jump_ex <= '1';
+				end if;
+			else
 				jump_ex <= '0';
+			end if;
 		end if;
 	end process;
 	
@@ -191,12 +193,14 @@ begin
 	begin
 		if reset = '1' then
 			branch_ex <= '0';
-		elsif rising_edge(clk) and branch_en = '1' then
-			if branch_ex = '0' then
-				branch_ex <= '1';
-			end if;
-		elsif rising_edge(clk) and branch_en = '0' then
+		elsif rising_edge(clk) then
+			if branch_en = '1' then
+				if branch_ex = '0' then
+					branch_ex <= '1';
+				end if;
+			else
 				branch_ex <= '0';
+			end if;
 		end if;
 	end process;
 
