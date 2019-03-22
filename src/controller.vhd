@@ -36,7 +36,7 @@ end controller;
 architecture arch of controller is
 	type state_type is (IDLE,FIRST_FETCH,DECODE_EX,STALL_MEM,STALL_FETCH);
 	signal state : state_type;
-	signal next_state : state_type := state;
+	signal next_state : state_type;
 
 	signal jump_ex : std_logic := '0';
 	signal branch_ex : std_logic := '0';
@@ -67,7 +67,7 @@ begin
 					when OPCODE_AUIPC =>
 						next_pc_out <= '1';
 						mux_pc_out <= PC_JUMP;
-						if fetch_hit_in then
+						if fetch_hit_in = '1'  then
 							next_state <= DECODE_EX;
 						else
 							next_state <= STALL_FETCH;
@@ -76,7 +76,7 @@ begin
 					when OPCODE_LUI =>
 						next_pc_out <= '1';
 						mux_pc_out <= PC_INC;
-						if fetch_hit_in then
+						if fetch_hit_in = '1' then
 							next_state <= DECODE_EX;
 						else
 							next_state <= STALL_FETCH;
@@ -85,17 +85,17 @@ begin
 					when OPCODE_OP_REG | OPCODE_OP_IMM => 
 						next_pc_out <= '1';
 						mux_pc_out <= PC_INC;
-						if fetch_hit_in then
+						if fetch_hit_in = '1'  then
 							next_state <= DECODE_EX;
 						else
 							next_state <= STALL_FETCH;
 						end if;
 
 					when OPCODE_STORE | OPCODE_LOAD =>
-						if mem_hit_in then
+						if mem_hit_in = '1' then
 							next_pc_out <= '1';
 							mux_pc_out <= PC_INC;
-							if fetch_hit_in then
+							if fetch_hit_in = '1' then
 								next_state <= DECODE_EX;
 							else
 								next_state <= STALL_FETCH;
@@ -116,7 +116,7 @@ begin
 							jump_en <= '0';
 							next_pc_out <= '1';
 							mux_pc_out <= PC_JUMP;
-							if fetch_hit_in then
+							if fetch_hit_in = '1' then
 								next_state <= DECODE_EX;
 							else
 								next_state <= STALL_FETCH;
@@ -138,7 +138,7 @@ begin
 								mux_pc_out <= PC_INC;
 							end if;
 							branch_en <= '0';
-							if fetch_hit_in then
+							if fetch_hit_in = '1' then
 								next_state <= DECODE_EX;
 							else
 								next_state <= STALL_FETCH;
@@ -148,7 +148,7 @@ begin
 				end case;
 
 			when STALL_MEM => 
-				if mem_hit_in then
+				if mem_hit_in = '1' then
 					next_pc_out <= '1';
 					mux_pc_out <= PC_INC;
 					next_state <= DECODE_EX;
@@ -159,7 +159,7 @@ begin
 				end if;
 
 			when STALL_FETCH => 
-				if fetch_hit_in then
+				if fetch_hit_in = '1' then
 					next_pc_out <= '1';
 					mux_pc_out <= PC_INC;
 					next_state <= DECODE_EX;
@@ -205,6 +205,7 @@ begin
 	begin
 		if reset = '1' then
 			state <= IDLE;
+			next_state <= state;
 		elsif rising_edge(clk) then
 			state <= next_state;
 		end if;

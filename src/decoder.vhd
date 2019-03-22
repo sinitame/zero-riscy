@@ -42,8 +42,8 @@ begin
 	op_code_parse : process(instruction_in,jump_ex_in, branch_ex_in,reset)
 		variable alu_operation : std_logic_vector(8 downto 0);
 		variable opcode : std_logic_vector(6 downto 0);
-		variable imm12_complement : std_logic_vector(19 downto 0) := (others => instruction_in(31));
-		variable imm20_complement : std_logic_vector(11 downto 0) := (others => instruction_in(31));
+		variable imm12_complement : std_logic_vector(19 downto 0);
+		variable imm20_complement : std_logic_vector(11 downto 0);
 	begin
 		if reset = '1' then
 			rA_out		<= (others => '0');
@@ -61,6 +61,7 @@ begin
 			opcode := instruction_in(6 downto 0);
 			case opcode is
 				when OPCODE_LUI =>
+					imm20_complement := (others => instruction_in(31));
 					-- (LUI) : Load Imm
 					rA_out			<= (others => '0');
 					rB_out			<= (others => '0');
@@ -74,6 +75,7 @@ begin
 					load_imm <= '1';
 					operator_out	<= ALU_ADD;
 				when OPCODE_JAL =>
+					imm20_complement := (others => instruction_in(31));
 					-- (JAL) : Unconditionnal jump Imm
 					if jump_ex_in = '0' then -- rC <- PC+4
 						rA_out			<= (others => '0');
@@ -98,8 +100,9 @@ begin
 					load_imm <= '0';
 
 				when OPCODE_JALR =>
+					imm12_complement := (others => instruction_in(31));
 					-- (JALR): Unconditionnal jump Reg
-					if not(jump_ex_in) then -- rC <- PC+4
+					if jump_ex_in='0' then -- rC <- PC+4
 						rA_out			<= (others => '0');
 						rB_out			<= (others => '0');
 						rC_out			<= instruction_in(11 downto 7);
@@ -122,8 +125,9 @@ begin
 					operator_out	<= ALU_ADD;
 
 				when OPCODE_BRANCH =>
+					imm12_complement := (others => instruction_in(31));
 					-- (B) : Conditional Jump
-					if branch_ex_in then
+					if branch_ex_in = '1' then
 						rA_out			<= (others => '0');
 						rB_out			<= (others => '0');
 						rC_out			<= (others => '0');
@@ -152,6 +156,7 @@ begin
 					load_imm <= '0';
 
 				when OPCODE_LOAD =>
+					imm12_complement := (others => instruction_in(31));
 					-- (L) : Memory load
 					rA_out			<= instruction_in(19 downto 15);
 					rB_out			<= (others => '0');
@@ -166,6 +171,7 @@ begin
 					operator_out	<= ALU_ADD;
 
 				when OPCODE_STORE =>
+					imm12_complement := (others => instruction_in(31));
 					-- (S) : Memory store
 					rA_out			<= instruction_in(19 downto 15);
 					rB_out			<= instruction_in(24 downto 20);
@@ -180,6 +186,7 @@ begin
 					operator_out	<= ALU_ADD;
 
 				when OPCODE_OP_IMM =>
+					imm12_complement := (others => instruction_in(31));
 					-- Imm ALU op
 					rA_out			<= instruction_in(19 downto 15);
 					rB_out			<= (others => '0');

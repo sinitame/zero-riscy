@@ -27,17 +27,17 @@ architecture arch of ROM is
 	-- Test ADDI (OP: ADD, RA: 1, IMM: 6, RC: 3)
 	constant inst3 : std_logic_vector(31 downto 0) := "000000000110"&"00001"&"000"&"00011"&"0010011";
 
-	-- Test JAL (RA: x, RB: x, RC:5, IMM: -1)
-	--constant inst4 : std_logic_vector(31 downto 0) := "00000000000000000011"&"00011"&"1101111";
+	-- Test JAL (RA: x, RB: x, RC:5, IMM: 3)
+	constant inst4 : std_logic_vector(31 downto 0) := "00000000000000000011"&"00011"&"1101111";
 
 	-- Test JALR (RA:4, RB:x, RC:3, IMM: 3)
-	--constant inst4 : std_logic_vector(31 downto 0) := "000000000011"&"00100"&"000"&"00011"&"1100111";
+	constant inst5 : std_logic_vector(31 downto 0) := "000000000011"&"00100"&"000"&"00011"&"1100111";
 
 	-- Test Branch OK (RA: 6, RB: 8, RC: x, IMM =7 )
-	--constant inst5 : std_logic_vector(31 downto 0) := "0000000"&"00110"&"01000"&"000"&"00111"&"1100011";
+	constant inst6 : std_logic_vector(31 downto 0) := "0000000"&"00110"&"01000"&"000"&"00111"&"1100011";
 	
 	-- Test Branch not OK (RA: 4, RB:3, RC:x, IMM=7)
-	constant inst6 : std_logic_vector(31 downto 0) := "0000000"&"00011"&"00100"&"000"&"00011"&"1100011";
+	constant inst7 : std_logic_vector(31 downto 0) := "0000000"&"00011"&"00100"&"000"&"00011"&"1100011";
 
 
 	type type_rom is array (low_addr to high_addr-1) of std_logic_vector(31 downto 0);
