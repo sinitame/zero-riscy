@@ -205,11 +205,10 @@ begin
 	end process;
 
 
-	process(clk, reset, state, next_state)
+	process(clk, reset, next_state)
 	begin
 		if reset = '1' then
 			state <= IDLE;
-			next_state <= state;
 		elsif rising_edge(clk) then
 			state <= next_state;
 		end if;
