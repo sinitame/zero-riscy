@@ -75,6 +75,8 @@ begin
 			OpA_out			=> A,						--
 			OpB_out			=> B,						--
 			Op_out			=> operator,				--
+			next_pc_out		=> pc_en,
+			mux_pc_out		=> pc_mux,
 			pc_in			=> pc,
 			fetch_hit_in	=> fetch_hit,
 			mem_hit_in		=> mem_hit,

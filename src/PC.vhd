@@ -19,11 +19,10 @@ end PC;
 
 architecture arch of PC is
 	signal new_pc_addr	: std_logic_vector(31 downto 0) := (others => '0');
-	signal pc_valid		: std_logic;
 	signal pc_addr		: std_logic_vector(31 downto 0);
 begin
 
-	pc_mux : process(pc_mux_in, pc_addr)
+	pc_mux : process(pc_mux_in, pc_addr, branch_target_in)
 	begin
 		case pc_mux_in is
 			when PC_INC => 
@@ -40,12 +39,12 @@ begin
 	begin
 		if reset = '1' then
 			pc_addr <= (others => '0');
-			pc_valid <= '0';
-		elsif rising_edge(clk) and pc_en_in = '1' then
-			pc_addr <= new_pc_addr;
-			pc_valid <= '1';
-		elsif rising_edge(clk) and pc_en_in = '0' then
-			pc_valid <= '0';
+		elsif rising_edge(clk) then
+			if pc_en_in = '1' then
+				pc_addr <= new_pc_addr;
+			else
+				pc_addr <= pc_addr;
+			end if;
 		end if;
 	end process;
 

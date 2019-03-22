@@ -19,7 +19,6 @@ entity id_stage is
 			pc_in				: in std_logic_vector(31 downto 0);
 			next_pc_out			: out std_logic;
 			mux_pc_out			: out std_logic_vector(1 downto 0);
-			pc_boot_out			: out std_logic;
 			fetch_hit_in		: in std_logic;
 
 			--Signals ALU
@@ -103,7 +102,6 @@ begin
 					jump_ex_out			=> jump_ex,
 					branch_ex_out		=> branch_ex,
 					branch_decision_in	=> branch_decision_in,
-					pc_boot_out			=> pc_boot_out,
 					next_pc_out			=> next_pc_out,
 					mux_pc_out			=> mux_pc_out,
 					fetch_hit_in		=> fetch_hit_in,
@@ -131,7 +129,7 @@ begin
 			case mux_b is
 				when B_REG => OpB_out <= rB_data;
 				when B_IMM => OpB_out <= imm;
-				when B_PC4 => OpB_out <= std_logic_vector(to_unsigned(4,32));
+				when B_PC4 => OpB_out <= std_logic_vector(to_unsigned(1,32));
 				when others => OpB_out <= (others => '0');
 			end case;
 		end process;

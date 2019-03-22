@@ -75,7 +75,7 @@ begin
 					operator_out	<= ALU_ADD;
 				when OPCODE_JAL =>
 					-- (JAL) : Unconditionnal jump Imm
-					if not(jump_ex_in) then -- rC <- PC+4
+					if jump_ex_in = '0' then -- rC <- PC+4
 						rA_out			<= (others => '0');
 						rB_out			<= (others => '0');
 						rC_out			<= instruction_in(11 downto 7);

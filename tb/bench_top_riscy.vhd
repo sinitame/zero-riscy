@@ -14,8 +14,8 @@ architecture arch of bench_top_riscy is
 	signal clk				: std_logic := '0';
 	signal reset			: std_logic := '1';
 	signal rom_read_addr	: std_logic_vector(31 downto 0) := (others => '0');
-	signal rom_read_ovalid	: std_logic := '0';
-	signal rom_read_ivalid	: std_logic := '0';
+	signal rom_read_ovalid	: std_logic;
+	signal rom_read_ivalid	: std_logic;
 	signal rom_read_data	: std_logic_vector(31 downto 0) := (others => '0');
 	signal mem_addr			: std_logic_vector(31 downto 0) := (others => '0');
 	signal mem_read_data	: std_logic_vector(31 downto 0) := (others => '0');
@@ -55,10 +55,13 @@ begin
 		port map(
 			clk				=> clk,
 			reset			=> reset,
-			addr_in			=> mem_addr,
+			addr_in			=> rom_read_addr,
 			valid_in		=> rom_read_ovalid,
-			valid_out		=> rom_read_ovalid,
+			valid_out		=> rom_read_ivalid,
 			data_out		=> rom_read_data
 				);
+
+	clk <= not(clk) after 10 ns;
+	reset <= '1','0' after 30 ns;
 	
 end arch;

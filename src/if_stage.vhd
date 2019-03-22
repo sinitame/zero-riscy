@@ -27,6 +27,7 @@ end if_stage;
 architecture arch of if_stage is
 	signal pc_address	: std_logic_vector(31 downto 0);
 	signal pc_valid		: std_logic;
+	signal instruction	: std_logic_vector(31 downto 0);
 
 begin
 
@@ -48,12 +49,20 @@ begin
 			read_valid_in	=> read_valid_in,
 			read_data_in	=> read_data_in,
 							
-			data_out		=> instruction_out,
+			data_out		=> instruction,
 			fetch_hit_out	=> fetch_hit_out,
 			addr_in			=> pc_address,
 			pc_valid_in		=> pc_valid
 				);
 	
+
+	if_to_id_register : process(clk, pc_valid)
+	begin
+		if rising_edge(clk) and pc_valid = '1'  then
+			instruction_out <= instruction;
+			pc_out			<= pc_address;
+		end if;
+	end process;
 	
 
 end arch;
