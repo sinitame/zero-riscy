@@ -38,10 +38,10 @@ architecture arch of controller is
 	signal state : state_type;
 	signal next_state : state_type;
 
-	signal jump_ex : std_logic := '0';
-	signal branch_ex : std_logic := '0';
-	signal jump_en : std_logic := '0';
-	signal branch_en : std_logic := '0';
+	signal jump_ex : std_logic;
+	signal branch_ex : std_logic;
+	signal jump_en : std_logic;
+	signal branch_en : std_logic;
 
 begin
 

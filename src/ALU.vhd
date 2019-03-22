@@ -22,7 +22,7 @@ end ALU;
 architecture arch of ALU is
 
 	signal static_op : std_logic_vector(6-1 downto 0);
-	signal result	: signed(32 downto 0) := (others => '0');
+	signal result	: signed(32 downto 0);
 
 begin
 

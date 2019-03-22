@@ -28,26 +28,26 @@ end top_riscy;
 architecture arch of top_riscy is
 
 	-- Signals to/from IF stage	
-	signal instruction	: std_logic_vector(31 downto 0) := (others => '0');
-	signal pc		: std_logic_vector(31 downto 0) := (others => '0');
-	signal pc_en	: std_logic := '0';
+	signal instruction	: std_logic_vector(31 downto 0);
+	signal pc		: std_logic_vector(31 downto 0);
+	signal pc_en	: std_logic;
 	signal pc_mux	: std_logic_vector(1 downto 0);
-	signal pc_boot	: std_logic := '0';
-	signal fetch_hit: std_logic := '0';
+	signal pc_boot	: std_logic;
+	signal fetch_hit: std_logic;
 
 	-- Signals from/to ALU
-	signal operator	: std_logic_vector(5 downto 0)	:= "000000";
-	signal A		: std_logic_vector(31 downto 0) := (others => '0');
-	signal B		: std_logic_vector(31 downto 0) := (others => '0');
-	signal result	: std_logic_vector(31 downto 0) := (others => '0');
-	signal comp_res	: std_logic := '0';
+	signal operator	: std_logic_vector(5 downto 0);
+	signal A		: std_logic_vector(31 downto 0);
+	signal B		: std_logic_vector(31 downto 0);
+	signal result	: std_logic_vector(31 downto 0);
+	signal comp_res	: std_logic;
 
 	-- Signals from/to LSU
-	signal mem_data	: std_logic_vector(31 downto 0) := (others => '0');
-	signal load_en	: std_logic := '0';
-	signal store_en	: std_logic := '0';
-	signal mem_hit	: std_logic := '0';
-	signal register_data: std_logic_vector(31 downto 0) := (others => '0');
+	signal mem_data	: std_logic_vector(31 downto 0);
+	signal load_en	: std_logic;
+	signal store_en	: std_logic;
+	signal mem_hit	: std_logic;
+	signal register_data: std_logic_vector(31 downto 0);
 
 begin
 

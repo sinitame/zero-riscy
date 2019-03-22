@@ -18,7 +18,7 @@ entity PC is
 end PC;
 
 architecture arch of PC is
-	signal new_pc_addr	: std_logic_vector(31 downto 0) := (others => '0');
+	signal new_pc_addr	: std_logic_vector(31 downto 0);
 	signal pc_addr		: std_logic_vector(31 downto 0);
 begin
 

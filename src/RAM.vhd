@@ -21,7 +21,6 @@ architecture arch of RAM is
 	constant high_address : natural := 2**5-1;
 
 	type type_mem is array (low_address to high_address) of std_logic_vector(31 downto 0);
-
 	signal mem_ram : type_mem;
 
 begin
