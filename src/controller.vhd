@@ -182,7 +182,7 @@ begin
 			if jump_ex = '0' then
 				jump_ex <= '1';
 			end if;
-		elsif rising_edge(clk) then
+		elsif rising_edge(clk) and jump_en = '0' then
 				jump_ex <= '0';
 		end if;
 	end process;
@@ -195,7 +195,7 @@ begin
 			if branch_ex = '0' then
 				branch_ex <= '1';
 			end if;
-		elsif rising_edge(clk) then
+		elsif rising_edge(clk) and branch_en = '0' then
 				branch_ex <= '0';
 		end if;
 	end process;
