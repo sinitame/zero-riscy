@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lib_VHDL;
-use lib_VHDL.defines.all;
+library work;
+use work.defines.all;
 
 entity decoder is
 	generic(
@@ -144,9 +144,12 @@ begin
 							when BRANCH_LTU	=> operator_out	<= ALU_LTU; --
 							when BRANCH_GEU	=> operator_out	<= ALU_GEU; --
 							when others		=>
+								operator_out <= (others => '0');
 						end case;
 						rA_out			<= instruction_in(19 downto 15);
 						rB_out			<= instruction_in(24 downto 20);
+						rC_out			<= (others => '0');
+						imm_out			<= (others => '0');
 						mux_a_out		<= A_REG;
 						mux_b_out		<= B_REG;
 					end if;
@@ -213,7 +216,9 @@ begin
 							else
 								operator_out <= ALU_SRA; --
 							end if;
-						when others => --nothing
+						when others => 
+							--nothing
+							operator_out <= (others => '0');
 					end case;
 
 				when OPCODE_OP_REG =>
@@ -241,13 +246,16 @@ begin
 						when OP_ALU_SRA	=> operator_out <= ALU_SRA; --
 						when OP_ALU_OR	=> operator_out <= ALU_OR; --
 						when OP_ALU_AND	=> operator_out <= ALU_AND; --
-						when others => --nothing
+						when others => 
+							--nothing
+							operator_out <= (others => '0');
 					end case;
 
 				when others =>
 					-- Nothing
 					rA_out		<= (others => '0');
 					rB_out		<= (others => '0');
+					rC_out		<= (others => '0');
 					imm_out		<= (others => '0');
 					operator_out <= (others => '0');
 					mux_a_out		<= (others => '0');

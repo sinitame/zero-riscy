@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lib_VHDL;
-use lib_VHDL.defines.all;
+library work;
+use work.defines.all;
 
 entity if_stage is
 	port(
@@ -31,7 +31,7 @@ architecture arch of if_stage is
 
 begin
 
-	PC : entity lib_VHDL.pc
+	PC : entity work.pc
 		port map(
 			clk					=> clk,
 			reset				=> reset,
@@ -42,7 +42,7 @@ begin
 			pc_valid_out		=> pc_valid
 				);
 
-	FETCH : entity lib_VHDL.fetch
+	FETCH : entity work.fetch
 		port map(
 			read_addr_out	=> read_addr_out,
 			read_valid_out	=> read_valid_out,

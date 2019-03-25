@@ -53,7 +53,7 @@ architecture arch of ROM is
 	others => (others => '0'));
 
 begin
-	data_reg : process(clk)
+	data_reg : process(clk, reset)
 	begin
 		if reset = '1' then
 			data_out <= (others => '0');

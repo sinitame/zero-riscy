@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lib_VHDL;
-use lib_VHDL.defines.all;
+library work;
+use work.defines.all;
 
 entity id_stage is
 	generic(
@@ -62,7 +62,7 @@ architecture arch of id_stage is
 	
 begin
 
-	DECODER : entity lib_VHDL.decoder
+	DECODER : entity work.decoder
 		port map (
 					reset			=> reset,
 					instruction_in	=> instruction,
@@ -81,7 +81,7 @@ begin
 					load_imm		=> load_imm
 				 );
 
-	GPR : entity lib_VHDL.GPR
+	GPR : entity work.GPR
 		port map (
 					clk				=> clk,
                     reset			=> reset,
@@ -94,7 +94,7 @@ begin
                     write_en_in		=> write_en
 				 );
 
-	CONTROLLER : entity lib_VHDL.controller
+	CONTROLLER : entity work.controller
 		port map(
 					clk					=> clk,
 					reset				=> reset,

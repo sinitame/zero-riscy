@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lib_VHDL;
-use lib_VHDL.defines.all;
+library work;
+use work.defines.all;
 
 entity fetch is
 	port(

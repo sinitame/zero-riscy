@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lib_VHDL;
-use lib_VHDL.defines.all;
+library work;
+use work.defines.all;
 
 entity top_riscy is
 	port(
@@ -51,7 +51,7 @@ architecture arch of top_riscy is
 
 begin
 
-	IF_STAGE : entity lib_vhdl.if_stage
+	IF_STAGE : entity work.if_stage
 		port map(
 			clk				=> clk,						--
 			reset			=> reset,					--
@@ -67,7 +67,7 @@ begin
 			fetch_hit_out	=> fetch_hit				--
 				);
 
-	ID_STAGE : entity lib_VHDL.id_stage
+	ID_STAGE : entity work.id_stage
 		port map(
 			clk				=> clk,						--
 			reset			=> reset,					--
@@ -88,7 +88,7 @@ begin
 			store_en_out	=> store_en					--
 				);
 
-	EX_STAGE : entity lib_VHDL.alu
+	EX_STAGE : entity work.alu
 		port map(
 			operator_in				=> operator,		--
 			operand_a_in			=> A,				--
@@ -97,19 +97,17 @@ begin
 			comparison_result_out	=> comp_res			--
 				);
 
-	LOAD_STORE : entity lib_vhdl.lsu
+	LOAD_STORE : entity work.lsu
 		port map(
-			clk				=> clk,						--
-			reset			=> reset,					--
 			addr_out		=> mem_addr_out,
 			rdata_in		=> mem_read_data_in,
 			wdata_out		=> mem_write_data_out,
 			alu_result_in	=> result,					--
 			register_data_in=> register_data,			--
 			rdata_out		=> mem_data,				--
-			mem_hit_out		=> mem_hit,
-			load_en_in		=> load_en,					--
-			store_en_in		=> store_en					--
+			mem_hit_out		=> mem_hit
+			--load_en_in		=> load_en,					--
+			--store_en_in		=> store_en					--
 				);
 
 	mem_write_en_out <= store_en;

@@ -24,7 +24,7 @@ architecture arch of RAM is
 	signal mem_ram : type_mem;
 
 begin
-	process(addr_in, read_en_in)
+	process(addr_in, read_en_in, mem_ram)
 	begin
 		if (read_en_in = '1') then
 			data_out <= mem_ram(to_integer(unsigned(addr_in)));

@@ -2,8 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-library lib_VHDL;
-use lib_VHDL.defines.all;
+library work;
+use work.defines.all;
 
 entity controller is
 	port(
@@ -45,15 +45,19 @@ architecture arch of controller is
 
 begin
 
-	FSM : process(state, fetch_hit_in, jump_ex, branch_decision_in, branch_ex, opcode_in)
+	FSM : process(state, fetch_hit_in, mem_hit_in, jump_ex, branch_decision_in, branch_ex, opcode_in)
 	begin
 		case state is
 			when IDLE =>
+				jump_en <= '0';
+				branch_en <= '0';
 				next_pc_out <= '0';
 				mux_pc_out  <= PC_BOOT;
 				next_state <= FIRST_FETCH;
 
 			when FIRST_FETCH =>
+				jump_en <= '0';
+				branch_en <= '0';
 				next_pc_out <= '1';
 				mux_pc_out  <= PC_BOOT;
 				if fetch_hit_in = '1' then
@@ -65,6 +69,8 @@ begin
 			when DECODE_EX =>
 				case opcode_in is
 					when OPCODE_AUIPC =>
+						jump_en <= '0';
+						branch_en <= '0';
 						next_pc_out <= '1';
 						mux_pc_out <= PC_JUMP;
 						if fetch_hit_in = '1'  then
@@ -74,6 +80,8 @@ begin
 						end if;
 
 					when OPCODE_LUI =>
+						jump_en <= '0';
+						branch_en <= '0';
 						next_pc_out <= '1';
 						mux_pc_out <= PC_INC;
 						if fetch_hit_in = '1' then
@@ -83,6 +91,8 @@ begin
 						end if;
 
 					when OPCODE_OP_REG | OPCODE_OP_IMM => 
+						jump_en <= '0';
+						branch_en <= '0';
 						next_pc_out <= '1';
 						mux_pc_out <= PC_INC;
 						if fetch_hit_in = '1'  then
@@ -92,6 +102,8 @@ begin
 						end if;
 
 					when OPCODE_STORE | OPCODE_LOAD =>
+						jump_en <= '0';
+						branch_en <= '0';
 						if mem_hit_in = '1' then
 							next_pc_out <= '1';
 							mux_pc_out <= PC_INC;
@@ -107,6 +119,7 @@ begin
 						end if;
 
 					when OPCODE_JAL | OPCODE_JALR =>
+						branch_en <= '0';
 						if jump_ex = '0' then
 							next_pc_out <= '0';
 							mux_pc_out  <= PC_INC;
@@ -124,30 +137,45 @@ begin
 						end if;
 
 					when OPCODE_BRANCH =>
-						if branch_ex = '0' and branch_decision_in = '1' then
-							branch_en <= '1';
-							next_pc_out <= '0';
-							mux_pc_out  <= PC_INC;
-							next_state <= DECODE_EX;
-						else
-							if branch_ex = '1' then
+						jump_en <= '0';
+						if branch_ex = '0' then
+							if branch_decision_in = '1' then
+								branch_en <= '1';
+								next_pc_out <= '0';
+								mux_pc_out  <= PC_INC;
+								next_state <= DECODE_EX;
+							else 
+								branch_en <= '0';
 								next_pc_out <= '1';
-								mux_pc_out <= PC_JUMP;
-							else
-								next_pc_out <= '1';
-								mux_pc_out <= PC_INC;
+								mux_pc_out  <= PC_INC;
+								if fetch_hit_in = '1' then
+									next_state <= DECODE_EX;
+								else
+									next_state <= STALL_FETCH;
+								end if;
 							end if;
+							
+						else
 							branch_en <= '0';
+							next_pc_out <= '1';
+							mux_pc_out <= PC_JUMP;
 							if fetch_hit_in = '1' then
 								next_state <= DECODE_EX;
 							else
 								next_state <= STALL_FETCH;
-							end if;
+							end if;					
 						end if;
 					when others =>
+						jump_en <= '0';
+						branch_en <= '0';
+						next_pc_out <= '0';
+						mux_pc_out <= PC_INC;
+						next_state <= DECODE_EX;
 				end case;
 
 			when STALL_MEM => 
+				jump_en <= '0';
+				branch_en <= '0';
 				if mem_hit_in = '1' then
 					next_pc_out <= '1';
 					mux_pc_out <= PC_INC;
@@ -159,6 +187,8 @@ begin
 				end if;
 
 			when STALL_FETCH => 
+				jump_en <= '0';
+				branch_en <= '0';
 				if fetch_hit_in = '1' then
 					next_pc_out <= '1';
 					mux_pc_out <= PC_INC;
@@ -170,11 +200,15 @@ begin
 				end if;
 
 			when others =>
+				jump_en <= '0';
+				branch_en <= '0';
 				next_state <= IDLE;
+				next_pc_out <= '0';
+				mux_pc_out <= PC_INC;
 		end case;
 	end process FSM;
 
-	jump_ex_register : process(clk, jump_en)
+	jump_ex_register : process(clk, reset, jump_en)
 	begin
 		if reset = '1' then
 			jump_ex <= '0';
@@ -189,7 +223,7 @@ begin
 		end if;
 	end process;
 	
-	branch_ex_register : process(clk, branch_en)
+	branch_ex_register : process(clk, reset, branch_en)
 	begin
 		if reset = '1' then
 			branch_ex <= '0';
