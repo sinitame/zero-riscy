@@ -168,7 +168,7 @@ begin
 					when others =>
 						jump_en <= '0';
 						branch_en <= '0';
-						next_pc_out <= '0';
+						next_pc_out <= '1';
 						mux_pc_out <= PC_INC;
 						next_state <= DECODE_EX;
 				end case;
